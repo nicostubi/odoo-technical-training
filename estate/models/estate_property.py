@@ -19,7 +19,7 @@ class EstateProperty(models.Model):
     living_area = fields.Integer()
     facades = fields.Integer()
     garage = fields.Boolean()
-    garden = fields.Boolean()
+    garden = fields.Boolean()   
     garden_area = fields.Integer()
     garden_orientation = fields.Selection(
         string='Orientation',
@@ -30,4 +30,6 @@ class EstateProperty(models.Model):
         string='State',
         selection=[('new', 'New'), ('offer_received', 'Offer Received'), ('offer_accepted', 'Offer Accepted'), ('sold', 'Sold'), ('canceled', 'Canceled')],
         required=True, copy=False, default="new")
+    property_type_id = fields.Many2one('estate.property.type', string="Property Type")
+
         
