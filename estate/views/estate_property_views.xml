@@ -57,7 +57,13 @@
                                 <field name="garden" string="Garden"/>
                                 <field name="garden_area" string="Garden area (sqm)"/>
                                 <field name="garden_orientation" string="Garden orientation"/>
-                                <field name="state" string="State"/>
+                                 <field name="state" string="State"/>
+
+                            </group>
+                        </page>
+                        <page string="Other info">
+                            <group>
+                                    <field name="state" string="State"/>
                             </group>
                         </page>
                     </notebook>
