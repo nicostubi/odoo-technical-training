@@ -62,6 +62,13 @@
                                 <field name="state" string="State"/>
                             </group>
                         </page>
+                        <page string="Offers">
+                            <group>
+                                <!-- <field name="price"/> -->
+                                <field name="offer_ids"/>
+                                <!-- <field name="status"/> -->
+                            </group>
+                        </page>
                         <page string="Other info">
                             <group>
                                 <field name="user_id"/>
