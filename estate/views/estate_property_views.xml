@@ -21,4 +21,63 @@
         </field>
     </record>
 
+    <record id="estate_property_view_form" model="ir.ui.view">
+        <field name="name">estate.property.form</field>
+        <field name="model">estate.property</field>
+        <field name="arch" type="xml">
+            <form string="Estate Property">
+                <sheet>
+                    <div class="real_estate_title" name="estate_property_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="postcode" string="Postcode"/>
+                            <field name="date_availability" string="Available From"/>
+                        </group>
+                        <group>
+                            <field name="expected_price" string="Expected Price"/>
+                            <field name="selling_price" string="Selling Price"/>
+                        </group>
+                    </group>
+
+                    <!-- <div class="oe_title" name="sale_order_template_title">
+                        <label for="name" id="sale_order_template_title"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Standard Consultancy Package" class="d-block"/>
+                        </h1>
+                    </div> -->
+                    <!-- <group>
+                        <h1>
+                            <group>
+                                <field name="name"/>
+                            </group>
+                        </h1>
+                        <group>
+                            <field name="postcode"/>
+                        </group>
+                        <group>
+                            <field name="expected_price"/>
+                        </group>
+                        <group>
+                            <field name="date_availability"/>
+                        </group>
+                        <group>
+                            <field name="selling_price"/>
+                        </group>
+                        <notebook>
+                            <page string="Description">
+                                <group>
+                                    <field name="description"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </group> -->
+                </sheet>
+            </form>
+        </field>
+    </record>
+
 </odoo>
