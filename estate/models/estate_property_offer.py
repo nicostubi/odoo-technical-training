@@ -1,6 +1,6 @@
-from odoo import api, fields, models
+from odoo import api, fields, _, models
+from odoo.exceptions import UserError
 from datetime import timedelta
-
 
 class EstatePropertyOffer(models.Model):
     _name = "estate.property.offer"
@@ -20,7 +20,7 @@ class EstatePropertyOffer(models.Model):
                                 inverse="_inverse_date_deadline_from")
 
     _sql_constraints = [
-        ('expected_price_positive', 'CHECK(price > 0)', 'The offer price must be strictly positive.')
+        ('expected_price_positive', 'CHECK(price >= 0)', 'The offer price must be strictly positive.')
     ]
 
     @api.depends('validity')
@@ -47,7 +47,18 @@ class EstatePropertyOffer(models.Model):
             record.validity = 7  # Or set to a default value
 
     def action_accept(self):
-        self.write({'status': 'accepted'})
+        self.ensure_one()
+        if self.property_id.partner_id:
+            raise UserError(_("The buyer has already been set."))
+        self.status = "accepted"
+        self.env["estate.property"].browse(self.property_id.id).write(
+            {
+                "selling_price": self.price,
+                "partner_id": self.partner_id.id,
+                "state": "offer_accepted",
+            }
+        )
+        return True
 
     def action_refuse(self):
         self.write({'status': 'refused'})

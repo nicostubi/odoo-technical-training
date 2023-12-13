@@ -2,8 +2,10 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from odoo import api, fields, _, models
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
+from odoo.tools.float_utils import float_compare, float_is_zero
 from datetime import timedelta
+
 
 class EstateProperty(models.Model):
     _name = 'estate.property'
@@ -40,8 +42,8 @@ class EstateProperty(models.Model):
     best_price = fields.Float(compute='_compute_best_price')
 
     _sql_constraints = [
-        ('expected_price_positive', 'CHECK(expected_price > 0)', 'The expected price must be strictly positive.'),
-        ('selling_price_positive', 'CHECK(selling_price > 0)', 'The selling price must be strictly positive.')
+        ('expected_price_positive', 'CHECK(expected_price >= 0)', 'The expected price must be strictly positive.'),
+        ('selling_price_positive', 'CHECK(selling_price >= 0)', 'The selling price must be strictly positive.')
     ]
 
     @api.depends('living_area', 'garden_area')
@@ -85,3 +87,15 @@ class EstateProperty(models.Model):
             else:
                 record.state = 'canceled'
         return True
+
+    @api.constrains('selling_price', 'expected_price')
+    def _check_selling_price(self):
+        print('test1')
+        for record in self:
+            print('record.selling_price : '+ str(record.selling_price))
+            print('float_is_zero(record.selling_price : '+ str(float_is_zero(record.selling_price, 2)))
+            if record.selling_price and not float_is_zero(record.selling_price, 2):
+                print('test')
+                min_price = record.expected_price * 0.9
+                if float_compare(record.selling_price, min_price, 2) < 0:
+                    raise ValidationError(_('Selling price must be at least 90% of the expected price.'))
