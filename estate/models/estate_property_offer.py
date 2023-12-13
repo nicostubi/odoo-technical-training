@@ -41,3 +41,9 @@ class EstatePropertyOffer(models.Model):
             record.validity = delta.days
         else:
             record.validity = 7  # Or set to a default value
+
+    def action_accept(self):
+        self.write({'status': 'accepted'})
+
+    def action_refuse(self):
+        self.write({'status': 'refused'})
