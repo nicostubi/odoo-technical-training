@@ -16,7 +16,6 @@ class EstatePropertyOffer(models.Model):
     property_id = fields.Many2one('estate.property', string='Property', required=True)
     validity = fields.Integer(string="Validity (days)", default=7)
     date_deadline = fields.Date(string="Deadline", 
-                                #compute="_compute_date_deadline") 
                                 compute="_compute_date_deadline", 
                                 inverse="_inverse_date_deadline_from")
 
@@ -25,7 +24,7 @@ class EstatePropertyOffer(models.Model):
         for record in self:
             date = record.create_date or fields.Datetime.today()
             if record.validity:
-                if self.create_date:
+                if record.create_date:
                     record.date_deadline = date + timedelta(days=record.validity)
                 else:
                     record.date_deadline = date + timedelta(days=record.validity)

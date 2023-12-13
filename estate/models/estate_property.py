@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from odoo import api, fields, models
+from odoo import api, fields, _, models
+from odoo.exceptions import UserError
 from datetime import timedelta
 
 class EstateProperty(models.Model):
@@ -59,3 +60,28 @@ class EstateProperty(models.Model):
         else:
             self.garden_area = None
             self.garden_orientation = None
+
+    def action_set_sold(self):
+        # self.ensure_one()
+        # self.action_set_won()
+
+        # message = self._get_rainbowman_message()
+        # if message:
+        #     return {
+        #         'effect': {
+        #             'fadeout': 'slow',
+        #             'message': message,
+        #             'img_url': '/web/image/%s/%s/image_1024' % (self.team_id.user_id._name, self.team_id.user_id.id) if self.team_id.user_id.image_1024 else '/web/static/src/img/smile.svg',
+        #             'type': 'rainbow_man',
+        #         }
+        #     }
+        return True
+
+    def action_set_cancel(self):
+        for record in self:
+            if record.state == 'sold':
+                # raise User error
+                raise UserError(_('The property was sold, you cannot cancel.'))
+            else:
+                record.state = 'canceled'
+        return True
