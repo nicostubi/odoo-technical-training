@@ -30,8 +30,8 @@
         <field name="arch" type="xml">
             <form string="Estate Property">
                 <header>
-                    <button name="action_set_sold" type="object" string="sold"/>
-                    <button name="action_set_cancel" type="object" string="cancel"/>
+                    <button name="action_set_sold" type="object" string="SOLD" class="oe_highlight"/>
+                    <button name="action_set_cancel" type="object" string="CANCEL" class="oe_highlight"/>
                 </header>
                 <sheet>
                     <div class="real_estate_title" name="estate_property_title">

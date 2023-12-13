@@ -62,26 +62,21 @@ class EstateProperty(models.Model):
             self.garden_orientation = None
 
     def action_set_sold(self):
-        # self.ensure_one()
-        # self.action_set_won()
-
-        # message = self._get_rainbowman_message()
-        # if message:
-        #     return {
-        #         'effect': {
-        #             'fadeout': 'slow',
-        #             'message': message,
-        #             'img_url': '/web/image/%s/%s/image_1024' % (self.team_id.user_id._name, self.team_id.user_id.id) if self.team_id.user_id.image_1024 else '/web/static/src/img/smile.svg',
-        #             'type': 'rainbow_man',
-        #         }
-        #     }
+        for record in self:
+            if record.state == 'canceled':
+                raise UserError(_('The property was canceled, you cannot sell.'))
+            elif record.state == 'sold':
+                raise UserError(_('The property is already in state sold.'))
+            else:
+                record.state = 'sold'
         return True
 
     def action_set_cancel(self):
         for record in self:
             if record.state == 'sold':
-                # raise User error
                 raise UserError(_('The property was sold, you cannot cancel.'))
+            elif record.state == 'canceled':
+                raise UserError(_('The property is already in state canceled.'))
             else:
                 record.state = 'canceled'
         return True
