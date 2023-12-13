@@ -14,16 +14,31 @@ class EstatePropertyOffer(models.Model):
     ], string='Status', copy=False)
     partner_id = fields.Many2one('res.partner', string='Partner', required=True)
     property_id = fields.Many2one('estate.property', string='Property', required=True)
-    validity = fields.Integer(string="Validity", default=7)
-    date_deadline = fields.Date(string="Deadline (days)", compute="_compute_date_deadline")
+    validity = fields.Integer(string="Validity (days)", default=7)
+    date_deadline = fields.Date(string="Deadline", 
+                                compute="_compute_date_deadline") 
+                                # compute="_compute_date_deadline", 
+                                # inverse="_inverse_date_deadline_from")
 
     @api.depends('validity')
     def _compute_date_deadline(self):
         for record in self:
+            date = record.create_date or fields.Datetime.today()
             if record.validity:
                 if self.create_date:
-                    record.date_deadline = self.create_date + timedelta(days=record.validity)
+                    record.date_deadline = date + timedelta(days=record.validity)
                 else:
-                    record.date_deadline = fields.Datetime.today() + timedelta(days=record.validity)
+                    record.date_deadline = date + timedelta(days=record.validity)
             else:
                 record.date_deadline = None
+
+    # def _inverse_date_deadline_from(self):
+    #     for record in self:
+    #         date = record.create_date or fields.Datetime.now()
+
+    #     # If date_deadline is set, calculate validity
+    #     if record.date_deadline:
+    #         delta = record.date_deadline - date.date()
+    #         record.validity = delta.days
+    #     else:
+    #         record.validity = 7  # Or set to a default value
