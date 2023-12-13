@@ -9,3 +9,7 @@ class EstatePropertyType(models.Model):
     # _order = "sequence"
 
     name = fields.Char('Real Estate Type', required=True)
+
+    _sql_constraints = [
+        ('name_unique', 'unique (name)', 'Property types must be unique.'),
+    ]
