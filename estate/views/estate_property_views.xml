@@ -32,6 +32,7 @@
                 <header>
                     <button name="action_set_sold" type="object" string="SOLD" class="oe_highlight"/>
                     <button name="action_set_cancel" type="object" string="CANCEL" class="oe_highlight"/>
+                    <field name="state" widget="statusbar" statusbar_visible="new,offer_received,offer_accepted,sold,canceled"/>
                 </header>
                 <sheet>
                     <div class="real_estate_title" name="estate_property_title">
