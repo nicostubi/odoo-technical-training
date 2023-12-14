@@ -46,6 +46,11 @@ class EstateProperty(models.Model):
         ('selling_price_positive', 'CHECK(selling_price >= 0)', 'The selling price must be strictly positive.')
     ]
 
+    @api.ondelete(at_uninstall=False)
+    def _unlink(self):
+        if self.state != 'new' and self.state != 'canceled':
+            raise UserError(_('The property is not in state new or canceled, you cannot delete it.'))
+
     @api.depends('living_area', 'garden_area')
     def _compute_total_area(self):
         for record in self:
