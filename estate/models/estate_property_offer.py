@@ -23,6 +23,25 @@ class EstatePropertyOffer(models.Model):
         ('expected_price_positive', 'CHECK(price >= 0)', 'The offer price must be strictly positive.')
     ]
 
+    #TODO please review :-)
+    @api.model
+    def create(self, vals):
+        property_id = vals.get('property_id')
+        if not property_id:
+            raise UserError(_("Property not specified."))
+
+        offers = self.search([('property_id', '=', property_id), ('status', '!=', 'refused')])
+
+        if offers and any(offer.price > vals.get('price') for offer in offers):
+            raise UserError(_("You cannot create an offer with a lower amount than an existing offer."))
+
+        property = self.env['estate.property'].browse(property_id)
+        if not property.exists():
+            raise UserError(_("Property not found."))
+        property.state = 'offer_received'
+
+        return super(EstatePropertyOffer, self).create(vals)
+
     @api.depends('validity')
     def _compute_date_deadline(self):
         for record in self:
