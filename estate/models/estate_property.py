@@ -48,8 +48,9 @@ class EstateProperty(models.Model):
 
     @api.ondelete(at_uninstall=False)
     def _unlink(self):
-        if self.state != 'new' and self.state != 'canceled':
-            raise UserError(_('The property is not in state new or canceled, you cannot delete it.'))
+        for record in self:
+            if record.state != 'new' and record.state != 'canceled':
+                raise UserError(_('The property is not in state new or canceled, you cannot delete it.'))
 
     @api.depends('living_area', 'garden_area')
     def _compute_total_area(self):
